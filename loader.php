@@ -1,43 +1,1 @@
-<?php
-/*
- Plugin Name: BuddyForms Anonymous Author
- Plugin URI: http://buddyforms.com/downloads/buddyforms-anonymous-author/
- Description: This BuddyForms Extension allows you to select a default Author and give your users the option to publish Anonymous under the default Author.
- Version: 1.0
- Author: Sven Lehnert
- Author URI: https://profiles.wordpress.org/svenl77
- License: GPLv2 or later
- Network: false
-
- *****************************************************************************
- *
- * This script is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- ****************************************************************************
- */
-
- function buddyforms_the_author($authordata){
-
-    return 'Anonymous';
- }
- add_filter( 'the_author', 'buddyforms_the_author', 10, 1 );
-
- function admin_author_link($link, $author_id, $author_nicename) {
-    if( $author_id==1 ) {
-        $link = 'http://google.de';
-    }
-    return $link;
- }
- add_filter( 'author_link', 'admin_author_link', 10, 3);
+<?php/* Plugin Name: BuddyForms Anonymous Author Plugin URI: http://buddyforms.com/downloads/buddyforms-anonymous-author/ Description: This BuddyForms Extension allows you to select a default Author and give your users the option to publish Anonymous under the default Author. Version: 1.0 Author: Sven Lehnert Author URI: https://profiles.wordpress.org/svenl77 License: GPLv2 or later Network: false ***************************************************************************** * * This script is free software; you can redistribute it and/or modify * it under the terms of the GNU General Public License as published by * the Free Software Foundation; either version 2 of the License, or * (at your option) any later version. * * This program is distributed in the hope that it will be useful, * but WITHOUT ANY WARRANTY; without even the implied warranty of * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the * GNU General Public License for more details. * * You should have received a copy of the GNU General Public License * along with this program; if not, write to the Free Software * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA * **************************************************************************** */// Change the Author display name function bf_anonymous_the_author($authordata){    global $post, $buddyforms;     if(is_admin())         return $authordata;//     echo '<pre>';//    print_r($post);//     echo '</pre>';//    $form_slug = get_post_meta($post->ID, 'bf_form_slug');////    if(!isset($form_slug))//        return $authordata;    $annonymus_author_id = get_post_meta($post->ID, 'anonymousauthor');    if(!isset($annonymus_author_id[0][0]))        return $authordata;    return get_the_author_meta( 'nicename', $annonymus_author_id[0][0] ); } add_filter( 'the_author', 'bf_anonymous_the_author', 10, 1 );// Change the Author Link function bf_anonymous_the_author_link($link, $author_id, $author_nicename) {    global $post, $buddyforms, $author_id, $author_nicename;     if(is_admin())         return $link;    $annonymus_author_id = get_post_meta($post->ID, 'anonymousauthor');    if(!isset($annonymus_author_id[0][0]))        return $link;    remove_filter( 'author_link', 'bf_anonymous_the_author_link', 10, 3 );        $link = get_author_posts_url($annonymus_author_id[0][0]);    add_filter( 'author_link', 'bf_anonymous_the_author_link', 10, 3 );    return $link; } add_filter( 'author_link', 'bf_anonymous_the_author_link', 10, 3 );add_filter('get_avatar_data','bf_a_get_avatar_data', 10, 2);function bf_a_get_avatar_data($args, $id_or_email){    global $post;    if(is_admin())        return $args;    $annonymus_author_id = get_post_meta($post->ID, 'anonymousauthor');    if(!isset($annonymus_author_id[0][0]))        return $args;    remove_filter( 'get_avatar_data', 'bf_a_get_avatar_data', 10, 2 );//    echo '<pre>';//    print_r($args);//    echo '</pre>';    $args =  get_avatar_data($annonymus_author_id[0][0]);    add_filter( 'get_avatar_data', 'bf_a_get_avatar_data', 10, 2 );    return $args;}// Add The Form Element to the Form Elements Sidebar function bf_anonymous_add_form_element_to_sidebar($sidebar_elements){     global $post;     if($post->post_type != 'buddyforms')         return;    $sidebar_elements[] = new Element_HTML('<p><a href="#" data-fieldtype="anonymousauthor" data-unique="unique" class="bf_add_element_action">Anonymous Author</a></p>');     return $sidebar_elements; } add_filter('buddyforms_add_form_element_to_sidebar','bf_anonymous_add_form_element_to_sidebar',1,2); /*  * Create the new form builder form element  * If you click on the sidebar form elment link this function will create the form builder element.  *  * Use buddyforms_form_element_add_field filter to add fields to the form element group  * $form_fields    --> All form element fields  * $form_slug      --> The form slug  * $field_type     --> The field type you have defined before in the link  * $field_id       --> A uique field ID automatically created  */ function bf_anonymous_form_builder_form_element($form_fields, $form_slug, $field_type, $field_id){     global $post;    // Get the form options    $buddyform = get_post_meta($post->ID, '_buddyforms_options', true);    // Only get in action if the new form element type is processed.    // I use a switch statement because you can have many form elements.    switch ($field_type) {        // Make sure we are on the correct form element type        case 'anonymousauthor':        unset($form_fields);        $form_fields['general']['name']    = new Element_Hidden("buddyforms_options[form_fields][" . $field_id . "][name]", 'Anonymous Author');        $form_fields['general']['slug']    = new Element_Hidden("buddyforms_options[form_fields][" . $field_id . "][slug]", 'anonymousauthor');        $form_fields['general']['type']    = new Element_Hidden("buddyforms_options[form_fields][" . $field_id . "][type]", $field_type);        // Create a variable for your field value        $anonymousauthor = false;        // Check if your field exists and assign the value to your variable        if (isset($buddyform['form_fields'][$field_id]['anonymousauthor']))            $anonymousauthor = $buddyform['form_fields'][$field_id]['anonymousauthor'];        $form_fields['general']['anonymousauthor'] = new Element_Textbox(            __('The Anonymous Author ID', 'buddyforms'), // The field label            "buddyforms_options[form_fields][" . $field_id . "][anonymousauthor]", // Field option name            array(                'value' => $anonymousauthor, // The value                'class' => '', // Additional class name                'id' => $field_id // The field id                )            );            // Add more form elements        break;    }    // Return the form fields    return $form_fields; }add_filter('buddyforms_form_element_add_field','bf_anonymous_form_builder_form_element',1,5); /*  * Display the new form element in the frontend form  *  */function bf_anonymous_create_frontend_element($form, $form_args){    global $buddyforms;    // Extract the form args    extract($form_args);    // Make sure the form element has a type value    if(!isset($customfield['type']))        return $form;    // Switch statement to find the form element type we'd like to display    switch ($customfield['type']) {        case 'anonymousauthor':            // Add form elements with parameter from $customfield            // $form->addElement(...)            // The custom field array includes all values from the form buiöder form element            // This example if from a taxonomy            $form->addElement( new Element_Checkbox( $customfield['name'], $customfield['slug'], array( $customfield['anonymousauthor'] => 'Anonymous Author'), array('value' => $customfield_val, 'class' => '', 'data-id' => $customfield['slug'] )));    break;    }    // Return the form element    return $form;}add_filter('buddyforms_create_edit_form_display_element','bf_anonymous_create_frontend_element',1,2);
