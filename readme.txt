@@ -1,6 +1,6 @@
 === BuddyForms BuddyForms Anonymous Author ===
 Contributors: svenl77, buddyforms
-Tags: BuddyForms, Ultimate Member, forms, form, custom form, custom forms, form administration, form builder, form creation, form creator, form manager, forms, forms builder, forms creation, forms creator, forms manager
+Tags: Anonymous, Anonymous Author, Anonymous Post, forms, form, custom form, custom forms, form administration, form builder, form creation, form creator, form manager, forms, forms builder, forms creation, forms creator, forms manager
 Requires at least: WordPress 4.0
 Tested up to: WordPress 4.5.2
 License: GPLv2 or later
@@ -12,6 +12,12 @@ BuddyForms Anonymous Author
 == Description ==
 
 This is the BuddyForms Anonymous Author Extension. Integrate your BuddyForms Forms into your Ultimate Member. You need the BuddyForms plugin installed for the plugin to work. <a href="http://buddyforms.com" target="_blank">Get BuddyForms now!</a>
+
+
+Select a default Author and give your users the option to publish Anonymous under the default Author.
+
+All public data like username user link avatar wil be replaced with the anonymous author profile.
+
 
 <h4>See this Video how to use the Plugin</h4>
 [youtube url]
