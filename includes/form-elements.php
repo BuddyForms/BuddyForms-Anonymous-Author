@@ -34,26 +34,6 @@ function bf_anonymous_form_builder_form_element( $form_fields, $form_slug, $fiel
 			$form_fields['general']['slug'] = new Element_Hidden( "buddyforms_options[form_fields][" . $field_id . "][slug]", 'anonymousauthor' );
 			$form_fields['general']['type'] = new Element_Hidden( "buddyforms_options[form_fields][" . $field_id . "][type]", $field_type );
 
-			// Create a variable for your field value
-			$anonymousauthor = false;
-
-			// Check if your field exists and assign the value to your variable
-			if ( isset( $buddyform['form_fields'][ $field_id ]['anonymousauthor'] ) ) {
-				$anonymousauthor = $buddyform['form_fields'][ $field_id ]['anonymousauthor'];
-			}
-
-			$form_fields['general']['anonymousauthor'] = new Element_Textbox(
-				__( 'The Anonymous Author ID', 'buddyforms' ), // The field label
-				"buddyforms_options[form_fields][" . $field_id . "][anonymousauthor]", // Field option name
-				array(
-					'value' => $anonymousauthor, // The value
-					'class' => '', // Additional class name
-					'id'    => $field_id // The field id
-				)
-			);
-
-			// Add more form elements
-
 			break;
 	}
 
@@ -103,3 +83,17 @@ function bf_anonymous_create_frontend_element( $form, $form_args ) {
 }
 
 add_filter( 'buddyforms_create_edit_form_display_element', 'bf_anonymous_create_frontend_element', 1, 2 );
+
+// Add the form element to the form elements sidebar
+function buddyforms_anonymous_add_form_element_to_sidebar( $sidebar_elements ) {
+	global $post;
+
+	if ( $post->post_type != 'buddyforms' ) {
+		return;
+	}
+
+	$sidebar_elements[] = new Element_HTML( '<p><a href="#" data-fieldtype="anonymousauthor" data-unique="unique" class="bf_add_element_action">Anonymous Author</a></p>' );
+
+	return $sidebar_elements;
+}
+add_filter( 'buddyforms_add_form_element_to_sidebar', 'buddyforms_anonymous_add_form_element_to_sidebar', 1, 2 );

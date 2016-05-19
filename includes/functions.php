@@ -62,6 +62,8 @@ function bf_anonymous_get_avatar_data( $args, $id_or_email ) {
 		return $args;
 	}
 
+	echo $annonymus_author_id[0][0];
+
 	remove_filter( 'get_avatar_data', 'bf_anonymous_get_avatar_data', 10, 2 );
 	$args = get_avatar_data( $annonymus_author_id[0][0] );
 	add_filter( 'get_avatar_data', 'bf_anonymous_get_avatar_data', 10, 2 );
@@ -71,17 +73,59 @@ function bf_anonymous_get_avatar_data( $args, $id_or_email ) {
 }
 add_filter( 'get_avatar_data', 'bf_anonymous_get_avatar_data', 10, 2 );
 
+function buddyforms_anonymous_pre_get_posts($query) {
 
-// Add the form element to the form elements sidebar
-function bf_anonymous_add_form_element_to_sidebar( $sidebar_elements ) {
-	global $post;
-
-	if ( $post->post_type != 'buddyforms' ) {
+	if ( !is_author() )
 		return;
+
+	if ( !$query->is_main_query() )
+		return;
+
+	$anonymous_author_name = get_option( 'buddyforms_anonymous_author_settings' );
+
+	$args = array(
+		'meta_query' => array(
+			array(
+				'key' => 'anonymousauthor',
+			)
+		)
+	);
+
+	// Get all anonymous author posts
+	$anonymous_author_posts = new WP_Query( $args );
+
+	// We need an array of post id's to exclude this posts from the main query
+	$anonymous_author_posts_array = wp_list_pluck( $anonymous_author_posts->posts, 'ID' );
+
+
+	if($anonymous_author_name != $query->query['author_name'] ) {
+
+		// Exclude anonymous posts
+		$query->set( 'post__not_in', $anonymous_author_posts_array );
+
+	} else {
+
+		global $wp_query;
+
+		wp_reset_query();
+
+		$args = array(
+			'author_name' => $anonymous_author_name,
+		);
+
+		// Get all anonymous author posts
+		$wp_query2 = new WP_Query( $args );
+
+		// start putting the contents in the new object
+		if(is_array($anonymous_author_posts->posts) && is_array($wp_query2->posts)){
+			$result = new WP_Query();
+			$result->posts = array_merge( $anonymous_author_posts->posts, $wp_query2->posts );
+			$result->post_count = count( $result->posts );
+			$wp_query = $result;
+		}
 	}
 
-	$sidebar_elements[] = new Element_HTML( '<p><a href="#" data-fieldtype="anonymousauthor" data-unique="unique" class="bf_add_element_action">Anonymous Author</a></p>' );
-
-	return $sidebar_elements;
+	//we remove the actions hooked on the '__after_loop' (post navigation)
+	remove_all_actions ( '__after_loop');
 }
-add_filter( 'buddyforms_add_form_element_to_sidebar', 'bf_anonymous_add_form_element_to_sidebar', 1, 2 );
+add_action('pre_get_posts','buddyforms_anonymous_pre_get_posts');
