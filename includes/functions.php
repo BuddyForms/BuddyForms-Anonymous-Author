@@ -62,8 +62,6 @@ function bf_anonymous_get_avatar_data( $args, $id_or_email ) {
 		return $args;
 	}
 
-	echo $annonymus_author_id[0][0];
-
 	remove_filter( 'get_avatar_data', 'bf_anonymous_get_avatar_data', 10, 2 );
 	$args = get_avatar_data( $annonymus_author_id[0][0] );
 	add_filter( 'get_avatar_data', 'bf_anonymous_get_avatar_data', 10, 2 );
