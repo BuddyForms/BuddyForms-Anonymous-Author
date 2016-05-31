@@ -31,7 +31,7 @@ function bf_anonymous_form_builder_form_element( $form_fields, $form_slug, $fiel
 				'value'    => $name,
 				'required' => 1
 			) );
-			$form_fields['general']['slug'] = new Element_Hidden( "buddyforms_options[form_fields][" . $field_id . "][slug]", 'anonymousauthor' );
+			$form_fields['advanced']['slug'] = new Element_Hidden( "buddyforms_options[form_fields][" . $field_id . "][slug]", 'anonymousauthor' );
 			$form_fields['general']['type'] = new Element_Hidden( "buddyforms_options[form_fields][" . $field_id . "][type]", $field_type );
 
 			break;
