@@ -11,7 +11,7 @@
  * $field_id       --> A uique field ID automatically created
  */
 
-function bf_anonymous_form_builder_form_element( $form_fields, $form_slug, $field_type, $field_id ) {
+function buddyforms_anonymous_form_builder_form_element( $form_fields, $form_slug, $field_type, $field_id ) {
 	global $post;
 
 	// Get the form options
@@ -23,7 +23,7 @@ function bf_anonymous_form_builder_form_element( $form_fields, $form_slug, $fiel
 		// Make sure we are on the correct form element type
 		case 'anonymousauthor':
 
-			unset( $form_fields );
+			//unset( $form_fields );
 			$name                           = isset( $buddyform['form_fields'][ $field_id ]['name'] ) ? stripcslashes( $buddyform['form_fields'][ $field_id ]['name'] ) : '';
 			$form_fields['general']['name'] = new Element_Textbox( '<b>' . __( 'Name', 'buddyforms' ) . '</b>', "buddyforms_options[form_fields][" . $field_id . "][name]", array(
 				'class'    => "use_as_slug",
@@ -40,7 +40,7 @@ function bf_anonymous_form_builder_form_element( $form_fields, $form_slug, $fiel
 	// Return the form fields
 	return $form_fields;
 }
-add_filter( 'buddyforms_form_element_add_field', 'bf_anonymous_form_builder_form_element', 1, 5 );
+add_filter( 'buddyforms_form_element_add_field', 'buddyforms_anonymous_form_builder_form_element', 1, 5 );
 
 /*
  * Display the new form element in the frontend form
@@ -60,6 +60,7 @@ function bf_anonymous_create_frontend_element( $form, $form_args ) {
 	switch ( $customfield['type'] ) {
 		case 'anonymousauthor':
 
+			$customfield_val =  isset( $customfield_val ) && is_array( $customfield_val ) ? $customfield_val : 'none';
 
 			// Add the checkbox to select anonymous author
 			$form->addElement(
