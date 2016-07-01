@@ -98,3 +98,22 @@ function buddyforms_anonymous_add_form_element_to_sidebar( $sidebar_elements ) {
 	return $sidebar_elements;
 }
 add_filter( 'buddyforms_add_form_element_to_sidebar', 'buddyforms_anonymous_add_form_element_to_sidebar', 1, 2 );
+
+function buddyforms_anonymous_add_form_element_to_select( $elements_select_options ) {
+	global $post;
+
+	if ( $post->post_type != 'buddyforms' ) {
+		return;
+	}
+
+	$elements_select_options['Anonymous Author'] = array(
+		'anonymousauthor' => array(
+			'label'     => __( 'Anonymous Author', 'buddyforms' ),
+			'unique'    => 'unique'
+		),
+	);
+
+	return $elements_select_options;
+}
+
+add_filter( 'buddyforms_add_form_element_to_select', 'buddyforms_anonymous_add_form_element_to_select', 1, 2 );
