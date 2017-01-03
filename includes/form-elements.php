@@ -106,14 +106,14 @@ function buddyforms_anonymous_add_form_element_to_select( $elements_select_optio
 		return;
 	}
 
-	$elements_select_options['Anonymous Author'] = array(
-		'anonymousauthor' => array(
-			'label'     => __( 'Anonymous Author', 'buddyforms' ),
-			'unique'    => 'unique'
-		),
+	$elements_select_options['anonymousauthor']['label'] = 'Anonymous Author';
+	$elements_select_options['anonymousauthor']['class'] = 'bf_show_if_f_type_post';
+	$elements_select_options['anonymousauthor']['fields']['anonymousauthor'] = array(
+		'label'     => __( 'Anonymous Author', 'buddyforms' ),
+		'unique'    => 'unique'
 	);
 
 	return $elements_select_options;
 }
 
-add_filter( 'buddyforms_add_form_element_to_select', 'buddyforms_anonymous_add_form_element_to_select', 1, 2 );
+add_filter( 'buddyforms_add_form_element_select_option', 'buddyforms_anonymous_add_form_element_to_select', 1, 2 );
