@@ -85,20 +85,6 @@ function bf_anonymous_create_frontend_element( $form, $form_args ) {
 
 add_filter( 'buddyforms_create_edit_form_display_element', 'bf_anonymous_create_frontend_element', 1, 2 );
 
-// Add the form element to the form elements sidebar
-function buddyforms_anonymous_add_form_element_to_sidebar( $sidebar_elements ) {
-	global $post;
-
-	if ( $post->post_type != 'buddyforms' ) {
-		return;
-	}
-
-	$sidebar_elements[] = new Element_HTML( '<p><a href="#" data-fieldtype="anonymousauthor" data-unique="unique" class="bf_add_element_action">Anonymous Author</a></p>' );
-
-	return $sidebar_elements;
-}
-add_filter( 'buddyforms_add_form_element_to_sidebar', 'buddyforms_anonymous_add_form_element_to_sidebar', 1, 2 );
-
 function buddyforms_anonymous_add_form_element_to_select( $elements_select_options ) {
 	global $post;
 
