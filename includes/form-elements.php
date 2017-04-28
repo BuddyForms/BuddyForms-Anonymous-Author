@@ -31,6 +31,13 @@ function buddyforms_anonymous_form_builder_form_element( $form_fields, $form_slu
 				'value'    => $name,
 				'required' => 1
 			) );
+
+			$author_id                           = isset( $buddyform['form_fields'][ $field_id ]['author_id'] ) ? stripcslashes( $buddyform['form_fields'][ $field_id ]['author_id'] ) : '';
+			$form_fields['general']['author_id'] = new Element_Textbox( '<b>' . __( 'Author', 'buddyforms' ) . '</b>', "buddyforms_options[form_fields][" . $field_id . "][author_id]", array(
+				'value'    => $author_id,
+				'required' => 1
+			) );
+
 			$form_fields['advanced']['slug'] = new Element_Hidden( "buddyforms_options[form_fields][" . $field_id . "][slug]", 'anonymousauthor' );
 			$form_fields['general']['type'] = new Element_Hidden( "buddyforms_options[form_fields][" . $field_id . "][type]", $field_type );
 
@@ -67,8 +74,7 @@ function bf_anonymous_create_frontend_element( $form, $form_args ) {
 				new Element_Checkbox(
 					$customfield['name'],
 					$customfield['slug'],
-					array(
-						$customfield['anonymousauthor'] => $customfield['name'] ),
+					array( $customfield['author_id'] => $customfield['name'] ),
 					array(  'value'   => $customfield_val,
 					        'class'   => '',
 					        'data-id' => $customfield['slug']
