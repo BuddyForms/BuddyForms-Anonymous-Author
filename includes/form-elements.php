@@ -1,16 +1,9 @@
 <?php
 
 /*
- * Create the new form builder form element
- * If you click on the sidebar form elment link this function will create the form builder element.
- *
- * Use buddyforms_form_element_add_field filter to add fields to the form element group
- * $form_fields    --> All form element fields
- * $form_slug      --> The form slug
- * $field_type     --> The field type you have defined before in the link
- * $field_id       --> A uique field ID automatically created
+ * Create the Anonymous Author form builder form element
  */
-
+add_filter( 'buddyforms_form_element_add_field', 'buddyforms_anonymous_form_builder_form_element', 1, 5 );
 function buddyforms_anonymous_form_builder_form_element( $form_fields, $form_slug, $field_type, $field_id ) {
 	global $post;
 
@@ -47,12 +40,11 @@ function buddyforms_anonymous_form_builder_form_element( $form_fields, $form_slu
 	// Return the form fields
 	return $form_fields;
 }
-add_filter( 'buddyforms_form_element_add_field', 'buddyforms_anonymous_form_builder_form_element', 1, 5 );
 
 /*
  * Display the new form element in the frontend form
- *
  */
+add_filter( 'buddyforms_create_edit_form_display_element', 'bf_anonymous_create_frontend_element', 1, 2 );
 function bf_anonymous_create_frontend_element( $form, $form_args ) {
 
 	// Extract the form args
@@ -89,8 +81,8 @@ function bf_anonymous_create_frontend_element( $form, $form_args ) {
 	return $form;
 }
 
-add_filter( 'buddyforms_create_edit_form_display_element', 'bf_anonymous_create_frontend_element', 1, 2 );
-
+// Add the form element to the form builder element select
+add_filter( 'buddyforms_add_form_element_select_option', 'buddyforms_anonymous_add_form_element_to_select', 1, 2 );
 function buddyforms_anonymous_add_form_element_to_select( $elements_select_options ) {
 	global $post;
 
@@ -107,5 +99,3 @@ function buddyforms_anonymous_add_form_element_to_select( $elements_select_optio
 
 	return $elements_select_options;
 }
-
-add_filter( 'buddyforms_add_form_element_select_option', 'buddyforms_anonymous_add_form_element_to_select', 1, 2 );
