@@ -30,3 +30,17 @@ function my_register_user_taxonomy() {
 	);
 
 }
+
+add_action( 'buddyforms_process_submission_end', 'my_save_user_profession_terms', 10 );
+function my_save_user_profession_terms( $args) {
+
+	$current_user_id = get_current_user_id();
+	extract($args);
+
+	update_post_meta( $post_id, 'bf_anonymous_author', $current_user_id);
+
+	wp_set_object_terms( $current_user_id, array( $post_id ), 'bf_a_author', false);
+
+	clean_object_term_cache( $current_user_id, 'bf_a_author' );
+
+}
