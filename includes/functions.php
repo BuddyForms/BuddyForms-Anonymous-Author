@@ -31,7 +31,7 @@ function buddyforms_anonymous_the_lp_query( $the_lp_query ){
 	$form_slug = $the_lp_query->query_vars['form_slug'];
 	$anonymousauthor = buddyforms_get_form_field_by_slug($form_slug, 'anonymousauthor');
 
-	if( ! isset( $anonymousauthor ) ){
+	if( ! $anonymousauthor ){
 		return $the_lp_query;
 	}
 
