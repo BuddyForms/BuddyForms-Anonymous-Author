@@ -79,18 +79,35 @@ function buddyforms_anonymous_user_can_edit($user_can_edit, $form_slug, $post_id
 	$bf_anonymous_author = get_post_meta( $post_id, 'bf_anonymous_author', true );
 
 	if( isset( $bf_anonymous_author ) && $bf_anonymous_author == get_current_user_id() ){
-		$user_can_edit = true;
+		if( user_can( $bf_anonymous_author, 'buddyforms_' . $form_slug . '_edit') ){
+			$user_can_edit = true;
+		}
 	}
 
 	return $user_can_edit;
 
 }
 
+add_filter( 'buddyforms_user_can_delete', 'buddyforms_moderation_user_can_delete', 10, 3 );
+
+function buddyforms_moderation_user_can_delete( $user_can_delete, $form_slug,  $post_id ){
+
+	$bf_anonymous_author = get_post_meta( $post_id, 'bf_anonymous_author', true );
+
+	if( isset( $bf_anonymous_author ) && $bf_anonymous_author == get_current_user_id() ){
+		if( user_can( $bf_anonymous_author, 'buddyforms_' . $form_slug . '_delete') ){
+			$user_can_delete = true;
+		}
+	}
+
+	return $user_can_delete;
+}
+
 //
 // Process the post and save the post meta and taxonomy
 //
-add_action( 'buddyforms_process_submission_end', 'buddyforms_save_user_profession_terms', 10 );
-function buddyforms_save_user_profession_terms( $args ) {
+add_action( 'buddyforms_process_submission_end', 'buddyforms_anonymous_save_author', 10 );
+function buddyforms_anonymous_save_author( $args ) {
 
 	// Check if anonymous author is set
 	if( ! isset( $_POST['anonymousauthor'] ) ){
