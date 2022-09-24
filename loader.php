@@ -4,7 +4,7 @@
  * Plugin Name: BuddyForms Anonymous Author
  * Plugin URI: http://buddyforms.com/downloads/buddyforms-anonymous-author/
  * Description: This BuddyForms Extension allows you to select a default Author and give your users the option to publish Anonymous under the default Author.
- * Version: 1.1
+ * Version: 1.2.0
  * Author: ThemeKraft
  * Author URI: https://themekraft.com/buddyforms/
  * License: GPLv2 or later

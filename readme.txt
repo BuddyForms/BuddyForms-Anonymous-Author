@@ -2,9 +2,9 @@
 Contributors: svenl77, buddyforms
 Tags: Anonymous, Anonymous Author, Anonymous Post, Anonymous Submission
 Requires at least: WordPress 4.0
-Tested up to: WordPress 5.0
+Tested up to: 6.0.2
 License: GPLv2 or later
-Stable tag: 1.1
+Stable tag: 1.2.0
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 BuddyForms Anonymous Author
@@ -45,6 +45,11 @@ You need the BuddyForms plugin installed for the plugin to work.
 == Screenshots ==
 
 == Changelog ==
+
+= 1.2.0 - 24 Sep 2022 =
+* Switching to paid version.
+* Adding support to bunndle license auto activation.
+* Tested up to WOrdPress 6.0.2
 
 = 1.1 -  Mar. 03 2019 =
 * Freemius SDK Update
