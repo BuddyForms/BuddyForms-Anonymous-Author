@@ -45,7 +45,7 @@ You need the BuddyForms plugin installed for the plugin to work.
 == Screenshots ==
 
 == Changelog ==
-= 1.2.1 - 15 Jan 2022 =
+= 1.2.1 - 15 Jan 2023 =
 * Enabled trial version.
 * Added bundle license auto activation.
 * Updated plugin first path.

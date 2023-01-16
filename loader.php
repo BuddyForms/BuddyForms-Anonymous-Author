@@ -115,6 +115,7 @@ function buddyforms_aa_fs() {
 			'type'                => 'plugin',
 			'public_key'          => 'pk_6b2da28e8be45961bcc58e88c894d',
 			'is_premium'          => true,
+			'is_premium_only'     => true,
 			'premium_suffix'      => 'Professional',
 			'has_premium_version' => true,
 			'has_paid_plans'      => true,
